@@ -32,7 +32,7 @@ This application integrates multiple sensor datasets—including air quality, ve
 
 Install the following Python packages (preferably inside a virtual environment):
 
-- **Flask** – Lightweight web framework.  
+Flask – Lightweight web framework.  
   ```bash
   pip install Flask
   ```
