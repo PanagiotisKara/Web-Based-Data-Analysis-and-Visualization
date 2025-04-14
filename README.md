@@ -75,7 +75,7 @@ Copy
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 Custom Scripts – scriptroad.js and detailed_map.js are part of the project’s static assets.
 
-Installation
+## Installation
 1. Clone the Repository
 Clone the repository to your local machine:
 
@@ -129,6 +129,7 @@ http://127.0.0.1:5000
     ├── styleroad.css          # Global CSS styling
     ├── scriptroad.js          # Custom script for maps/charts in main views
     └── detailed_map.js        # Custom script for the detailed sensor map page
+
     
 ## Usage
 Dashboard Navigation:
