@@ -137,3 +137,6 @@ The Detailed Map page displays an interactive Leaflet map with sensor markers. T
 
 Interactive Charts and Analysis:
 Data visualizations update dynamically as sensor data is processed and aggregated. Hover interactions and intuitive legends make it easy for users to explore patterns, identify peaks, and assess urban conditions.
+
+## Application preview
+https://github.com/PanagiotisKara/Web-Based-Data-Analysis-and-Visualization/blob/main/Application%20preview.mp4
