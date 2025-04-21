@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Air Quality | Data Visualization and Analysis</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleroad.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="{{ url_for('static', filename='scriptroad.js') }}"></script>
+    <script src="{{ url_for('static', filename='detailed_map.js') }}"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-left">
+                <a href="/"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo"></a>
+                <h1><a href="/">Data Visualization and Analysis</a></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/detailed_map" class="{% if request.path.startswith('/detailed_map') %}active{% endif %}">Map</a></li>
+                    <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">AirQuality</a></li>
+                    <li><a href="/vehicle" class="{% if request.path.startswith('/vehicle') %}active{% endif %}">Vehicle Count</a></li>
+                    <li><a href="/speed" class="{% if request.path.startswith('/speed') %}active{% endif %}">Speed</a></li>
+                    <li><a href="/sound" class="{% if request.path.startswith('/sound') %}active{% endif %}">Sound</a></li>
+                    <li><a href="/parking" class="{% if request.path.startswith('/parking') %}active{% endif %}">Parking</a></li>
+                    <li><a href="/echarging" class="{% if request.path.startswith('/echarging') %}active{% endif %}">Electric Charging</a></li>
+                </ul>
+            </nav>
+        </div>
+</header>
+<div class="container-content">
+    <div class="map-legend-container">
+        <div id="detailedMap"></div>
+        <div id="sensorLegend">
+            <div class="category-block">
+                <div class="category-header">
+                    <span>
+                        <input type="checkbox" class="category-checkbox" value="airQuality" checked>
+                        Air Quality
+                    </span>
+                    <button class="toggle-button">+</button>
+                </div>
+                <div class="category-content">
+                    <div class="legend-item" data-lat="47.542621107" data-lng="7.58512577">
+                        <span class="legend-color" style="background-color:#023E8A;"></span>G107
+                    </div>
+                    <div class="legend-item" data-lat="47.542079622" data-lng="7.586808755">
+                        <span class="legend-color" style="background-color:#0077B6;"></span>G125
+                    </div>
+                    <div class="legend-item" data-lat="47.542283184" data-lng="7.586144668">
+                        <span class="legend-color" style="background-color:#0096C7;"></span>G131
+                    </div>
+                </div>
+            </div>
+            <div class="category-block">
+                <div class="category-header">
+                    <span>
+                        <input type="checkbox" class="category-checkbox" value="airQualityComparison" checked>
+                        Air Quality Comparison
+                    </span>
+                    <button class="toggle-button">+</button>
+                </div>
+                <div class="category-content">
+                    <div class="legend-item" data-lat="47.567021" data-lng="7.594735">
+                        <span class="legend-color" style="background-color:#F48C06;"></span>Feldbergstrasse
+                    </div>
+                    <div class="legend-item" data-lat="47.565949" data-lng="7.582015">
+                        <span class="legend-color" style="background-color:#FFBA08;"></span>St. Johanns-Platz
+                    </div>
+                    <div class="legend-item" data-lat="47.538074" data-lng="7.648997">
+                        <span class="legend-color" style="background-color:#DC2F02;"></span>A2 Hard
+                    </div>
+                </div>
+            </div>
+            <div class="category-block">
+                <div class="category-header">
+                    <span>
+                        <input type="checkbox" class="category-checkbox" value="trafficNoise" checked>
+                        Traffic Noise
+                    </span>
+                    <button class="toggle-button">+</button>
+                </div>
+                <div class="category-content">
+                    <div class="legend-item" data-lat="47.542738567" data-lng="7.584766135">
+                        <span class="legend-color" style="background-color:#0000FF;"></span>Traffic noise
+                    </div>
+                </div>
+            </div>
+            <div class="category-block">
+                <div class="category-header">
+                    <span>
+                        <input type="checkbox" class="category-checkbox" value="parkingSpots" checked>
+                        Parking Spots
+                    </span>
+                    <button class="toggle-button">+</button>
+                </div>
+                <div class="category-content">
+                    <div class="legend-item" data-lat="47.54286" data-lng="7.584762">
+                        <span class="legend-color small" style="background-color:#0000FF;"></span>Blue Parking
+                    </div>
+                    <div class="legend-item" data-lat="47.543043" data-lng="7.584479">
+                        <span class="legend-color small" style="background-color:#0000FF;"></span>Blue Parking
+                    </div>
+                    <div class="legend-item" data-lat="47.542872" data-lng="7.584714">
+                        <span class="legend-color small" style="background-color:#0000FF;"></span>Blue Parking
+                    </div>
+                    <div class="legend-item" data-lat="47.542889" data-lng="7.58467">
+                        <span class="legend-color small" style="background-color:#0000FF;"></span>Blue Parking
+                    </div>
+                    <div class="legend-item" data-lat="47.542932" data-lng="7.584533">
+                        <span class="legend-color small" style="background-color:#FFFF00;"></span>Yellow Parking
+                    </div>
+                    <div class="legend-item" data-lat="47.542916" data-lng="7.584576">
+                        <span class="legend-color small" style="background-color:#FFFF00;"></span>Yellow Parking
+                    </div>
+                </div>
+            </div>
+            <div class="category-block">
+                <div class="category-header">
+                    <span>
+                        <input type="checkbox" class="category-checkbox" value="evCharging" checked>
+                        EV Charging
+                    </span>
+                    <button class="toggle-button">+</button>
+                </div>
+                <div class="category-content">
+                    <div class="legend-item" data-lat="47.541764" data-lng="7.5880928">
+                        <span class="legend-color" style="background-color:#800000;"></span>Electric charging
+                    </div>
+                    <div class="legend-item" data-lat="47.54177" data-lng="7.5880887">
+                        <span class="legend-color" style="background-color:#400000;"></span>Electric charging
+                    </div>
+                    <div class="legend-item" data-lat="47.541766375" data-lng="7.588071298">
+                        <span class="legend-color" style="background-color:#FF0000;"></span>Electric charging
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

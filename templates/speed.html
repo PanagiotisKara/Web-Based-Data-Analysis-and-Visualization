@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="el">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Speed | Data Visualization and Analysis</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleroad.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Poppins:wght@500;700&display=swap"
+        rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/leaflet.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="{{ url_for('static', filename='scriptroad.js') }}"></script>
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="header-left">
+                <a href="/"><img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" class="logo"></a>
+                <h1><a href="/">Data Visualization and Analysis</a></h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/detailed_map" class="{% if request.path.startswith('/detailed_map') %}active{% endif %}">Map</a></li>
+                    <li><a href="/" class="{% if request.path == '/' %}active{% endif %}">AirQuality</a></li>
+                    <li><a href="/vehicle" class="{% if request.path.startswith('/vehicle') %}active{% endif %}">Vehicle Count</a></li>
+                    <li><a href="/speed" class="{% if request.path.startswith('/speed') %}active{% endif %}">Speed</a></li>
+                    <li><a href="/sound" class="{% if request.path.startswith('/sound') %}active{% endif %}">Sound</a></li>
+                    <li><a href="/parking" class="{% if request.path.startswith('/parking') %}active{% endif %}">Parking</a></li>
+                    <li><a href="/echarging" class="{% if request.path.startswith('/echarging') %}active{% endif %}">Electric Charging</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container-content">
+        <div id="section-traffic" class="section">
+            <div class="chart-container" style="height: 620px;">
+                <div id="chart1" style="width: 100%; height: 600px;"></div>
+            </div>
+            <table id="statsSpeed">
+                <thead>
+                    <tr>
+                        <th>Measurement</th>
+                        <th>Daily Min</th>
+                        <th>Daily Max</th>
+                        <th>Daily Avg</th>
+                        <th>Daily Median</th>
+                        <th>Recording Max</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Speed (km/h)</td>
+                        <td id="speed_min"></td>
+                        <td id="speed_max"></td>
+                        <td id="speed_avg"></td>
+                        <td id="speed_median"></td>
+                        <td id="instantaneous_speed_max"></td>
+                    </tr>
+                    <tr>
+                        <td>Number of Vehicles</td>
+                        <td id="vehicle_min_speed"></td>
+                        <td id="vehicle_max_speed"></td>
+                        <td id="vehicle_avg_speed"></td>
+                        <td id="vehicle_median_speed"></td>
+                        <td id="vehicle_instantaneous_speed"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="chart-container" style="height: 620px;">
+                <div id="chart2" style="width: 100%; height: 600px;"></div>
+            </div>
+            <table id="statsSound">
+                <thead>
+                    <tr>
+                        <th>Measurement</th>
+                        <th>Daily Min</th>
+                        <th>Daily Max</th>
+                        <th>Daily Avg</th>
+                        <th>Daily Median</th>
+                        <th>Recording Max</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Sound Pressure (dB)</td>
+                        <td id="sound_min"></td>
+                        <td id="sound_max"></td>
+                        <td id="sound_avg"></td>
+                        <td id="sound_median"></td>
+                        <td id="instantaneous_sound_max"></td>
+                    </tr>
+                    <tr>
+                        <td>Number of Vehicles</td>
+                        <td id="vehicle_min_sound"></td>
+                        <td id="vehicle_max_sound"></td>
+                        <td id="vehicle_avg_sound"></td>
+                        <td id="vehicle_median_sound"></td>
+                        <td id="vehicle_instantaneous_sound"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+</html>
