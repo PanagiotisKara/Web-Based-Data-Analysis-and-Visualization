@@ -131,15 +131,17 @@ http://127.0.0.1:5000
 ## Usage
 Dashboard Navigation:
 Use the navigation bar to switch between different pages (Air Quality, Vehicle Count, Speed, Sound, etc.).
+![image](https://github.com/user-attachments/assets/ce235ea8-1f29-4f97-87b2-0666d922d555)
+
 
 Detailed Map and Sensor Legend:
 The Detailed Map page displays an interactive Leaflet map with sensor markers. The sensor legend is integrated into the page on the right, grouped by categories (Air Quality, Air Quality Comparison, Traffic Noise, Parking Spots, EV Charging). Each category is collapsible via a toggle button, and a checkbox in the header allows you to show/hide all sensors in that category. Clicking on a sensor in the legend smoothly pans and zooms the map to that location.
+![image](https://github.com/user-attachments/assets/165b38ab-e67c-4118-a522-a7a99d1f1a5d)
+
 
 Interactive Charts and Analysis:
 Data visualizations update dynamically as sensor data is processed and aggregated. Hover interactions and intuitive legends make it easy for users to explore patterns, identify peaks, and assess urban conditions.
-
-## Application preview
-https://github.com/PanagiotisKara/Web-Based-Data-Analysis-and-Visualization/blob/main/Application%20preview.mp4
+![Untitled](https://github.com/user-attachments/assets/cfa235cf-6feb-4f71-8468-724081e9c0b3)
 
 ## Update 1.1 05/05/2025
 Added eval_imputation and eval_models + updated app.py
