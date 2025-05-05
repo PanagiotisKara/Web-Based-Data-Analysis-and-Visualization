@@ -3,6 +3,7 @@ from flask import Flask, render_template, jsonify, request
 import pandas as pd
 import os
 import time
+import psutil
 from flask_caching import Cache
 from sklearn.impute import KNNImputer
 import numpy as np
@@ -57,12 +58,21 @@ def profile_endpoint(func):
     from functools import wraps
     @wraps(func)
     def wrapper(*args, **kwargs):
+        process = psutil.Process(os.getpid())
+        mem_start = process.memory_info().rss / (1024 ** 2)
         start_time = time.time()
+
         result = func(*args, **kwargs)
+
         elapsed = time.time() - start_time
-        app.logger.info(f"{func.__name__} ολοκληρώθηκε σε {elapsed:.2f} δευτερόλεπτα")
+        mem_end = process.memory_info().rss / (1024 ** 2)
+        app.logger.info(
+            f"{func.__name__} completed in {elapsed:.2f}s — "
+            f"Memory: start={mem_start:.2f} MB, end={mem_end:.2f} MB (Δ={mem_end-mem_start:+.2f} MB)"
+        )
         return result
     return wrapper
+
 
 @app.route("/get_road_data")
 @cache.cached()
@@ -73,9 +83,9 @@ def get_road_data():
     imputed_file = os.path.join(CSV_FOLDER, "AirQ_imputed.csv")
     
     if not os.path.exists(AirQ_csv):
-        return jsonify({"error": "δεν βρέθηκε AirQ.csv"}), 404
+        return jsonify({"error": "AirQ.csv not found"}), 404
     if not os.path.exists(AirQComp_csv):
-        return jsonify({"error": "δεν βρέθηκε AirQComp.csv"}), 404
+        return jsonify({"error": "AirQComp.csv not found"}), 404
 
     try:
         if os.path.exists(imputed_file):
@@ -86,7 +96,7 @@ def get_road_data():
                 if col not in non_numeric_cols:
                     df_all[col] = pd.to_numeric(df_all[col], errors='coerce')
         else:
-            app.logger.info("Το Imputed αρχείο δεν βρέθηκε - επεξεργασία δεδομένων...")
+            app.logger.info("Imputed NOT FOUND - CREATING IMPUTED FILE...")
 
             df = pd.read_csv(AirQ_csv, sep=None, engine="python", on_bad_lines="skip")
             expected_cols = [
@@ -110,7 +120,7 @@ def get_road_data():
                     "timestamp_text", "Anfangszeit"
                 ]
             else:
-                msg = f"AirQComp.csv έχει {df_comp.shape[1]} στήλες, έπρεπε 12"
+                msg = f"AirQComp.csv has {df_comp.shape[1]} columns, 12 expected"
                 app.logger.error(msg)
                 return jsonify({"error": msg}), 500
 
@@ -252,7 +262,7 @@ def get_corr_matrix():
 def get_vehicle_data():
     csv_path = os.path.join(CSV_FOLDER, "VechicleC.csv")
     if not os.path.exists(csv_path):
-        return jsonify({"error": "δεν βρέθηκε VechicleC.csv"}), 404
+        return jsonify({"error": "VechicleC.csv not found"}), 404
     try:
         df = pd.read_csv(csv_path, sep=None, engine="python", on_bad_lines='skip')
         df["Zeitstempel"] = pd.to_datetime(df["Zeitstempel"], errors="coerce", utc=True)
@@ -536,6 +546,8 @@ def get_parking_data():
         return jsonify({"error": str(e)}), 500
     
 @app.route("/get_echarging_data")
+@cache.cached()
+@profile_endpoint
 def get_echarging_data():
     try:
         csv_path = os.path.join(CSV_FOLDER, "Ecar.csv")
