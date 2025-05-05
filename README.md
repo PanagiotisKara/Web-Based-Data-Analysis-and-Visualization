@@ -141,8 +141,8 @@ Data visualizations update dynamically as sensor data is processed and aggregate
 ## Application preview
 https://github.com/PanagiotisKara/Web-Based-Data-Analysis-and-Visualization/blob/main/Application%20preview.mp4
 
-## Update 1.1 
+## Update 1.1 05/05/2025
 Added eval_imputation and eval_models + updated app.py
 
-eval files evaluate the imputed files printing in the terminal  MAE (Mean Absolute Error) and RMSE (Root‐Mean‐Squared Error) of the imputed values
+eval files evaluate the imputed values, printing in the terminal  MAE (Mean Absolute Error) and RMSE (Root‐Mean‐Squared Error) of the imputed values.
 
