@@ -262,7 +262,7 @@ $.getJSON('/get_road_data', function (data) {
         y: [statsG107_NO2.median, statsG107_NO2.median],
         name: "Median G107 NO₂",
         mode: "lines",
-        hoverinfo: "skip", 
+        hoverinfo: "skip",
         line: { dash: "dash", width: 2, color: "cyan" }
     };
 
@@ -468,7 +468,7 @@ $.getJSON('/get_road_data', function (data) {
         y: [statsG107_O3.median, statsG107_O3.median],
         name: "Median G107 O₃",
         mode: "lines",
-        hoverinfo: "skip", 
+        hoverinfo: "skip",
         line: { dash: "dash", width: 2, color: "red" }
     };
 
@@ -941,47 +941,62 @@ $.getJSON('/get_road_data', function (data) {
 });
 
 $.getJSON('/get_corr_matrix', function (data) {
-    let sensorNames = Object.keys(data);
+    const sensorNames = Object.keys(data);
 
-    function getPollutantType(sensorName) {
-        if (sensorName.indexOf("O3") > -1) return "O3";
-        if (sensorName.indexOf("NO2") > -1) return "NO2";
-        if (sensorName.indexOf("PM2.5") > -1) return "PM2.5";
-        if (sensorName.indexOf("PM10") > -1) return "PM10";
+    function getPollutantType(name) {
+        if (name.includes("O3")) return "O3";
+        if (name.includes("NO2")) return "NO2";
+        if (name.includes("PM2.5")) return "PM2.5";
+        if (name.includes("PM10")) return "PM10";
         return null;
     }
 
-    let zData = sensorNames.map(rowName => {
-        return sensorNames.map(colName => {
-            let rowType = getPollutantType(rowName);
-            let colType = getPollutantType(colName);
-            if (rowType !== null && colType !== null && rowType === colType) {
-                return data[rowName][colName];
-            } else {
-                return null;
-            }
-        });
-    });
+    const zData = sensorNames.map(r =>
+        sensorNames.map(c => {
+            const rt = getPollutantType(r), ct = getPollutantType(c);
+            return (rt && ct && rt === ct)
+                ? data[r][c]
+                : null;
+        }));
 
-    let traceHeatmap = {
+    // build annotation objects
+    const annotations = [];
+    for (let i = 0; i < sensorNames.length; i++) {
+        for (let j = 0; j < sensorNames.length; j++) {
+            const val = zData[i][j];
+            if (val !== null) {
+                annotations.push({
+                    x: sensorNames[j],
+                    y: sensorNames[i],
+                    text: val.toFixed(2),
+                    showarrow: false,
+                    font: {
+                        family: 'Arial, sans-serif',
+                        size: 17,
+                        color: 'black'
+                    }
+                });
+            }
+        }
+    }
+
+    const trace = {
         z: zData,
         x: sensorNames,
         y: sensorNames,
         type: 'heatmap',
         colorscale: 'Viridis',
-        zmin: -1,
-        zmax: 1,
-        colorbar: { title: "Correlation" }
+        zmin: -1, zmax: 1,
+        colorbar: { title: 'Correlation' }
     };
 
-    let layoutHeatmap = {
-        title: "Correlation Heatmap: Homogeneous Measurements by Type (O₃, NO₂, PM2.5)",
+    const layout = {
+        title: "Correlation Heatmap: Homogeneous Measurements by Type",
+        annotations: annotations,
         margin: { l: 100, r: 100, t: 100, b: 100 }
     };
 
-    Plotly.newPlot('heatmapCorr', [traceHeatmap], layoutHeatmap);
-}).fail(function (err) {
-    console.error("Error loading correlation matrix:", err);
+    Plotly.newPlot('heatmapCorr', [trace], layout);
 });
 
 $.getJSON('/get_vehicle_data', function (data) {
@@ -1126,7 +1141,7 @@ $.getJSON('/get_spso_data', function (data) {
     $("#vehicle_max_sound").text(vehicleMax.toFixed(2));
     $("#vehicle_median_sound").text(medianCountValue.toFixed(2));
     $("#vehicle_instantaneous_sound").text(stats.instantaneous_vehicle_max.toFixed(2));
-    
+
     let xDates = daily.map(d => new Date(d.day));
 
     function downsampleArray(arr, interval) {
