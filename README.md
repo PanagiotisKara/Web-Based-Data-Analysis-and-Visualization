@@ -114,8 +114,8 @@ http://127.0.0.1:5000
 ## File Structure
 ```
 ├── app.py                    # Flask application and routes
-├── eval_imputation.py
-├── eval_models.py                   
+├── eval_imputation.py        # evaluate the imputed values for AirQuality Data
+├── eval_models.py            # evaluate the imputed values for Speed Data                   
 ├── data/                     # CSV data files (sensor datasets)
     ├── AirQ.csv              #Air Pollution Sensor Data
     ├── AirQ_imputed.csv      #AirQ.csv and AirQComp.csv with imputed Data for faster loading speeds (if there is no such file, it is generated after the first time you load the Air Quality page)
