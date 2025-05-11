@@ -148,3 +148,5 @@ Added eval_imputation and eval_models + updated app.py
 
 eval files evaluate the imputed values, printing in the terminal  MAE (Mean Absolute Error) and RMSE (Root‐Mean‐Squared Error) of the imputed values.
 
+## Update 1.2 11/05/2025
+Updated scriptroad.js for corr_matrix to display values inside boxes.
