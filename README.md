@@ -2,7 +2,7 @@
 
 This application integrates multiple sensor datasets—including air quality, vehicle counts, traffic noise, parking, and EV charging data—to provide interactive, data-driven visualizations and analytical insights. The backend is built with Python Flask, and the frontend leverages dynamic mapping and charting libraries to deliver a responsive dashboard for urban monitoring.
 
-This Web Application's paper is Published by [MDPI - Future Internet](https://www.google.com)
+This Web Application's paper is Published by [MDPI - Future Internet](https://www.mdpi.com/1999-5903/17/5/217)
 
 ## Table of Contents
 
